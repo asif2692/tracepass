@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<h2>Batches — {{ product.name }}</h2>
+<p><a href="{{ url_for('products.detail', id=product.id) }}">&larr; Back to product</a></p>
+<div class="row g-4">
+<div class="col-md-5"><div class="card"><div class="card-header">Add Batch</div><div class="card-body">
+<form method="POST">{{ form.hidden_tag() }}
+<div class="mb-2">{{ form.batch_no.label(class="form-label") }}{{ form.batch_no(class="form-control") }}</div>
+<div class="mb-2">{{ form.manufacture_date.label(class="form-label") }}{{ form.manufacture_date(class="form-control") }}</div>
+<div class="mb-2">{{ form.production_location.label(class="form-label") }}{{ form.production_location(class="form-control") }}</div>
+<div class="row"><div class="col-6 mb-2">{{ form.quantity.label(class="form-label") }}{{ form.quantity(class="form-control") }}</div>
+<div class="col-6 mb-2">{{ form.unit.label(class="form-label") }}{{ form.unit(class="form-control") }}</div></div>
+{{ form.submit(class="btn btn-primary btn-sm") }}
+</form></div></div></div>
+<div class="col-md-7"><div class="card"><div class="table-responsive">
+<table class="table mb-0"><thead><tr><th>Batch No</th><th>Date</th><th>Location</th><th>Qty</th></tr></thead>
+<tbody>{% for b in batches %}<tr>
+<td>{{ b.batch_no }}</td><td>{{ b.manufacture_date or '—' }}</td>
+<td>{{ b.production_location or '—' }}</td>
+<td>{{ b.quantity or '—' }} {{ b.unit }}</td>
+</tr>{% else %}<tr><td colspan="4" class="text-muted text-center">No batches.</td></tr>{% endfor %}
+</tbody></table></div></div></div>
+</div></div>
+{% endblock %}

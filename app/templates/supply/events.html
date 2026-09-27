@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<div class="d-flex justify-content-between mb-3">
+<h2>Events — {{ product.name }}</h2>
+<a href="{{ url_for('supply.add_event', product_id=product.id) }}" class="btn btn-primary btn-sm">Add Event</a>
+</div>
+<p><a href="{{ url_for('products.detail', id=product.id) }}">&larr; Product</a> ·
+<a href="{{ url_for('supply.timeline', product_id=product.id) }}">Timeline view</a></p>
+<div class="card"><div class="table-responsive">
+<table class="table mb-0"><thead><tr><th>Type</th><th>Date</th><th>Location</th><th>Org</th><th>Ref</th></tr></thead>
+<tbody>{% for e in events %}<tr>
+<td><span class="badge bg-primary">{{ e.event_type }}</span></td>
+<td>{{ e.event_date.strftime('%d %b %Y') if e.event_date else '—' }}</td>
+<td>{{ e.location or '—' }}</td>
+<td>{{ e.organization.name if e.organization else '—' }}</td>
+<td>{{ e.reference_no or '—' }}</td>
+</tr>{% else %}<tr><td colspan="5" class="text-muted text-center">No events.</td></tr>{% endfor %}
+</tbody></table></div></div></div>
+{% endblock %}

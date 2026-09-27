@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<h2>Material Catalog</h2>
+<div class="row g-4">
+<div class="col-md-4"><div class="card"><div class="card-header">Add Material</div><div class="card-body">
+<form method="POST">{{ form.hidden_tag() }}
+<div class="mb-2">{{ form.name.label(class="form-label") }}{{ form.name(class="form-control") }}</div>
+<div class="mb-2">{{ form.category.label(class="form-label") }}{{ form.category(class="form-control") }}</div>
+<div class="mb-2">{{ form.origin_country.label(class="form-label") }}{{ form.origin_country(class="form-control") }}</div>
+<div class="mb-2">{{ form.description.label(class="form-label") }}{{ form.description(class="form-control", rows=2) }}</div>
+{{ form.submit(class="btn btn-primary btn-sm") }}
+</form></div></div></div>
+<div class="col-md-8"><div class="card"><div class="table-responsive">
+<table class="table mb-0"><thead><tr><th>Name</th><th>Category</th><th>Origin</th></tr></thead>
+<tbody>{% for m in materials %}<tr>
+<td>{{ m.name }}</td><td>{{ m.category or '—' }}</td><td>{{ m.origin_country or '—' }}</td>
+</tr>{% else %}<tr><td colspan="3" class="text-muted text-center">Empty catalog.</td></tr>{% endfor %}
+</tbody></table></div></div></div>
+</div></div>
+{% endblock %}

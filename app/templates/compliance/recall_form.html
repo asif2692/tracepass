@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container"><div class="row justify-content-center"><div class="col-md-6">
+<div class="card"><div class="card-header">Issue Product Recall</div><div class="card-body">
+<form method="POST">{{ form.hidden_tag() }}
+<div class="mb-2">{{ form.product_id.label(class="form-label") }}{{ form.product_id(class="form-select") }}</div>
+<div class="mb-2">{{ form.batch_id.label(class="form-label") }}{{ form.batch_id(class="form-select") }}</div>
+<div class="mb-2">{{ form.severity.label(class="form-label") }}{{ form.severity(class="form-select") }}</div>
+<div class="mb-2">{{ form.reason.label(class="form-label") }}{{ form.reason(class="form-control", rows=4) }}</div>
+{{ form.submit(class="btn btn-warning") }}
+<a href="{{ url_for('compliance.recalls') }}" class="btn btn-outline-secondary">Cancel</a>
+</form></div></div></div></div></div>
+{% endblock %}

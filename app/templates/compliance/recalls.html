@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<div class="d-flex justify-content-between mb-3">
+<h2>Product Recalls</h2>
+<a href="{{ url_for('compliance.issue_recall') }}" class="btn btn-warning btn-sm">Issue Recall</a>
+</div>
+<div class="card"><div class="table-responsive">
+<table class="table mb-0">
+<thead><tr><th>Product</th><th>Severity</th><th>Status</th><th>Reason</th><th>Issued</th><th></th></tr></thead>
+<tbody>
+{% for r in recalls %}
+<tr>
+<td>{{ r.product.name if r.product else '—' }}<br><code class="small">{{ r.product.passport_code if r.product else '' }}</code></td>
+<td><span class="badge {% if r.severity=='critical' %}bg-danger{% elif r.severity=='high' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">{{ r.severity }}</span></td>
+<td><span class="badge {% if r.status=='open' %}bg-danger{% else %}bg-success{% endif %}">{{ r.status }}</span></td>
+<td class="small">{{ r.reason[:120] }}{% if r.reason|length > 120 %}…{% endif %}</td>
+<td class="small">{{ r.issued_at.strftime('%d %b %Y') if r.issued_at else '—' }}</td>
+<td>
+{% if r.status == 'open' and current_user.has_role('Auditor', 'Admin') %}
+<form method="POST" action="{{ url_for('compliance.close_recall', id=r.id) }}" class="d-inline">
+<button class="btn btn-sm btn-outline-success" onclick="return confirm('Close this recall?')">Close</button>
+</form>
+{% endif %}
+</td>
+</tr>
+{% else %}
+<tr><td colspan="6" class="text-muted text-center">No recalls.</td></tr>
+{% endfor %}
+</tbody></table></div></div></div>
+{% endblock %}

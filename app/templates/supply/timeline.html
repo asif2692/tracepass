@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<h2>Timeline — {{ product.name }} <code class="fs-6">{{ product.passport_code }}</code></h2>
+<p><a href="{{ url_for('products.detail', id=product.id) }}">&larr; Product</a></p>
+<div class="list-group">
+{% for e in events %}
+<div class="list-group-item">
+<div class="d-flex w-100 justify-content-between">
+<h6 class="mb-1"><span class="badge bg-primary">{{ e.event_type }}</span>
+{{ e.location or '' }}</h6>
+<small>{{ e.event_date.strftime('%d %b %Y %H:%M') if e.event_date else '' }}</small>
+</div>
+<p class="mb-1 small text-muted">{{ e.organization.name if e.organization else '' }}
+{% if e.reference_no %} · Ref: {{ e.reference_no }}{% endif %}</p>
+{% if e.notes %}<p class="mb-0 small">{{ e.notes }}</p>{% endif %}
+</div>
+{% else %}
+<div class="list-group-item text-muted">No events recorded yet.</div>
+{% endfor %}
+</div></div>
+{% endblock %}

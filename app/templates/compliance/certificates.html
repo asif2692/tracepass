@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<div class="d-flex justify-content-between mb-3">
+<h2>Certificates</h2>
+{% if current_user.has_role('Supplier', 'Manufacturer', 'Admin') %}
+<a href="{{ url_for('compliance.add_certificate') }}" class="btn btn-primary btn-sm">Add Certificate</a>
+{% endif %}
+</div>
+<div class="card"><div class="table-responsive">
+<table class="table mb-0"><thead><tr><th>Type</th><th>Issuer</th><th>Issue</th><th>Expiry</th><th>Status</th><th>Expired?</th></tr></thead>
+<tbody>{% for c in certificates %}<tr>
+<td>{{ c.cert_type }}</td><td>{{ c.issuer or '—' }}</td>
+<td>{{ c.issue_date or '—' }}</td><td>{{ c.expiry_date or '—' }}</td>
+<td><span class="badge bg-secondary">{{ c.verification_status }}</span></td>
+<td>{% if c.is_expired %}<span class="badge bg-danger">Yes</span>{% else %}<span class="badge bg-success">No</span>{% endif %}</td>
+</tr>{% else %}<tr><td colspan="6" class="text-muted text-center">No certificates.</td></tr>{% endfor %}
+</tbody></table></div></div></div>
+{% endblock %}

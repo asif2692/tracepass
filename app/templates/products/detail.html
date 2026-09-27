@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h2>{{ product.name }}</h2>
+            <p class="mb-1"><code>{{ product.passport_code }}</code>
+                <span class="badge bg-secondary">{{ product.status }}</span>
+                <span class="badge bg-info text-dark">{{ product.compliance_status }}</span>
+            </p>
+            <p class="text-muted small mb-0">Manufacturer: {{ product.manufacturer.name if product.manufacturer else '—' }}
+                · Origin: {{ product.origin_country or '—' }}</p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            {% if current_user.has_role('Manufacturer', 'Admin') %}
+            <a href="{{ url_for('products.edit', id=product.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+            <a href="{{ url_for('products.batches', id=product.id) }}" class="btn btn-sm btn-outline-secondary">Batches</a>
+            <a href="{{ url_for('products.materials', id=product.id) }}" class="btn btn-sm btn-outline-secondary">Materials</a>
+            {% if product.status != 'published' %}
+            <form method="POST" action="{{ url_for('products.submit_compliance', id=product.id) }}" class="d-inline">
+                <button class="btn btn-sm btn-warning">Submit for Review</button>
+            </form>
+            <form method="POST" action="{{ url_for('products.publish', id=product.id) }}" class="d-inline">
+                <button class="btn btn-sm btn-success">Publish</button>
+            </form>
+            {% endif %}
+            {% endif %}
+            <a href="{{ url_for('products.passport_pdf', id=product.id) }}" class="btn btn-sm btn-outline-danger">PDF</a>
+            <a href="{{ url_for('supply.timeline', product_id=product.id) }}" class="btn btn-sm btn-outline-info">Timeline</a>
+            <a href="{{ url_for('supply.events', product_id=product.id) }}" class="btn btn-sm btn-outline-info">Events</a>
+            <a href="{{ url_for('supply.shipments', product_id=product.id) }}" class="btn btn-sm btn-outline-info">Shipments</a>
+            {% if current_user.has_role('Auditor', 'Admin') %}
+            <a href="{{ url_for('compliance.product_review', product_id=product.id) }}" class="btn btn-sm btn-outline-dark">Compliance</a>
+            {% endif %}
+            {% if product.is_published %}
+            <a href="{{ url_for('public.passport', passport_code=product.passport_code) }}" class="btn btn-sm btn-primary" target="_blank">Public View</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card"><div class="card-header bg-white fw-semibold">Details</div>
+            <div class="card-body">
+                <dl class="row mb-0 small">
+                    <dt class="col-4">Category</dt><dd class="col-8">{{ product.category or '—' }}</dd>
+                    <dt class="col-4">Brand</dt><dd class="col-8">{{ product.brand or '—' }}</dd>
+                    <dt class="col-4">Model</dt><dd class="col-8">{{ product.model or '—' }}</dd>
+                    <dt class="col-4">Description</dt><dd class="col-8">{{ product.description or '—' }}</dd>
+                    <dt class="col-4">Created</dt><dd class="col-8">{{ product.created_at.strftime('%d %b %Y') if product.created_at else '—' }}</dd>
+                </dl>
+            </div></div>
+        </div>
+        <div class="col-md-6">
+            <div class="card"><div class="card-header bg-white fw-semibold">QR / Public Link</div>
+            <div class="card-body text-center">
+                {% if product.is_published %}
+                <p class="small text-muted">Scan or open public passport:</p>
+                <p><a href="{{ url_for('public.passport', passport_code=product.passport_code, _external=True) }}">
+                    {{ url_for('public.passport', passport_code=product.passport_code, _external=True) }}
+                </a></p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ url_for('public.passport', passport_code=product.passport_code, _external=True)|urlencode }}"
+                     alt="QR Code" class="img-fluid" style="max-width:150px">
+                {% else %}
+                <p class="text-muted">Publish the product to generate a public QR code.</p>
+                {% endif %}
+            </div></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

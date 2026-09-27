@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero -->
+<section class="bg-primary text-white py-5 mb-0" style="background: linear-gradient(135deg, #0d6efd 0%, #0a2540 100%);">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="badge bg-light text-primary mb-3">Digital Product Passport</span>
+                <h1 class="display-4 fw-bold mb-3">TracePass</h1>
+                <p class="lead mb-4 opacity-90">
+                    Track every product from raw material to end customer.
+                    Verify authenticity, compliance and supply-chain journey in one trusted system.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg px-4">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg px-4">
+                        Register
+                    </a>
+                    <a href="{{ url_for('public.verify') }}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-qr-code-scan"></i> Verify Passport
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <i class="bi bi-shield-check" style="font-size: 12rem; opacity: 0.25;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">What TracePass Does</h2>
+            <p class="text-muted">End-to-end digital product passport &amp; supply-chain compliance</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex p-3 mb-3">
+                            <i class="bi bi-qr-code text-primary fs-3"></i>
+                        </div>
+                        <h5 class="card-title">Product Passports</h5>
+                        <p class="card-text text-muted">Unique digital identity for every product with QR verification and public passport view.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex p-3 mb-3">
+                            <i class="bi bi-diagram-3 text-primary fs-3"></i>
+                        </div>
+                        <h5 class="card-title">Supply-Chain Trace</h5>
+                        <p class="card-text text-muted">Record sourcing, manufacturing, shipments and transfers as a full chronological timeline.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-3">
+                    <div class="card-body">
+                        <div class="rounded-circle bg-primary bg-opacity-10 d-inline-flex p-3 mb-3">
+                            <i class="bi bi-clipboard-check text-primary fs-3"></i>
+                        </div>
+                        <h5 class="card-title">Compliance &amp; Audit</h5>
+                        <p class="card-text text-muted">Certificates, rules, automated checks and officer review — approve, reject or request corrections.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Roles -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Built for Every Stakeholder</h2>
+        </div>
+        <div class="row g-3 text-center">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-person fs-2 text-primary"></i>
+                    <p class="mb-0 mt-2 small fw-semibold">Customer</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-truck fs-2 text-primary"></i>
+                    <p class="mb-0 mt-2 small fw-semibold">Supplier</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-building fs-2 text-primary"></i>
+                    <p class="mb-0 mt-2 small fw-semibold">Manufacturer</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-box-seam fs-2 text-primary"></i>
+                    <p class="mb-0 mt-2 small fw-semibold">Distributor</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-clipboard-check fs-2 text-primary"></i>
+                    <p class="mb-0 mt-2 small fw-semibold">Auditor</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 bg-white rounded shadow-sm h-100">
+                    <i class="bi bi-gear fs-2 text-primary"></i>
+                    <p class="mb-0 mt-2 small fw-semibold">Admin</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="py-5">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-3">Verify a product in seconds</h3>
+        <p class="text-muted mb-4">Enter a passport code or scan the QR on the product packaging.</p>
+        <a href="{{ url_for('public.verify') }}" class="btn btn-primary btn-lg px-5">
+            <i class="bi bi-qr-code-scan"></i> Open Verify Page
+        </a>
+    </div>
+</section>
+{% endblock %}

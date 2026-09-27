@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Roles</h2>
+        <a href="{{ url_for('admin.create_role') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-lg"></i> Add Role
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Default</th>
+                        <th>Users</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for role in roles %}
+                    <tr>
+                        <td><strong>{{ role.name }}</strong></td>
+                        <td>{{ role.description or '—' }}</td>
+                        <td>
+                            {% if role.is_default %}
+                                <span class="badge bg-info text-dark">Default</span>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td>{{ role.users.count() }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.edit_role', id=role.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" class="text-center text-muted">No roles defined.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

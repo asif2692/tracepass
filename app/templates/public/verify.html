@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+<div class="row justify-content-center"><div class="col-md-6">
+<div class="card shadow"><div class="card-body p-4">
+<h3 class="text-center mb-3"><i class="bi bi-qr-code-scan"></i> Verify Product Passport</h3>
+<form method="GET">
+<div class="input-group mb-3">
+<input type="text" name="code" value="{{ code }}" class="form-control form-control-lg" placeholder="Enter passport code e.g. TP-XXXXXXXXXX" required>
+<button class="btn btn-primary btn-lg">Verify</button>
+</div>
+</form>
+{% if code %}
+{% if product %}
+<div class="alert alert-success">
+<strong>Valid passport found.</strong><br>
+{{ product.name }} · <code>{{ product.passport_code }}</code><br>
+<a href="{{ url_for('public.passport', passport_code=product.passport_code) }}" class="btn btn-sm btn-success mt-2">View Full Passport</a>
+</div>
+{% else %}
+<div class="alert alert-danger">No published passport found for code <code>{{ code }}</code>.</div>
+{% endif %}
+{% endif %}
+</div></div></div></div></div>
+{% endblock %}

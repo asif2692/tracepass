@@ -1,0 +1,61 @@
+:root {
+    --tp-primary: #0d6efd;
+    --tp-dark: #0a2540;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+}
+
+main {
+    flex: 1;
+}
+
+.navbar-brand {
+    letter-spacing: 0.5px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.stat-card {
+    border-left: 4px solid var(--tp-primary);
+    transition: transform 0.15s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.table th {
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #6c757d;
+}
+
+.badge-role {
+    font-weight: 500;
+}
+
+.footer {
+    font-size: 0.875rem;
+}
+
+/* Auth pages */
+.auth-card {
+    max-width: 480px;
+    margin: 2rem auto;
+}
+
+/* Dashboard chart container */
+.chart-container {
+    position: relative;
+    height: 280px;
+}

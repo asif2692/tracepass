@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<h2>Compliance Review — {{ product.name }}</h2>
+<p><code>{{ product.passport_code }}</code> · Status: {{ product.compliance_status }}</p>
+<p><a href="{{ url_for('products.detail', id=product.id) }}">&larr; Product</a></p>
+
+<div class="row g-4">
+<div class="col-md-7">
+<div class="card mb-3"><div class="card-header">Certificates</div>
+<ul class="list-group list-group-flush">
+{% for c in certificates %}
+<li class="list-group-item d-flex justify-content-between">
+<span>{{ c.cert_type }} ({{ c.issuer or 'n/a' }}) {% if c.is_expired %}<span class="badge bg-danger">Expired</span>{% endif %}</span>
+<span class="badge bg-secondary">{{ c.verification_status }}</span>
+</li>
+{% else %}<li class="list-group-item text-muted">No certificates.</li>{% endfor %}
+</ul></div>
+
+<div class="card mb-3"><div class="card-header d-flex justify-content-between">
+<span>Checks</span>
+<form method="POST" action="{{ url_for('compliance.run_checks', product_id=product.id) }}">
+<button class="btn btn-sm btn-outline-primary">Run Automated Checks</button>
+</form>
+</div>
+<ul class="list-group list-group-flush">
+{% for ch in checks %}
+<li class="list-group-item small">
+<strong>{{ ch.rule.name if ch.rule else 'Rule' }}</strong> —
+<span class="badge {% if ch.result=='pass' %}bg-success{% elif ch.result=='fail' %}bg-danger{% else %}bg-warning text-dark{% endif %}">{{ ch.result }}</span>
+<br>{{ ch.notes or '' }}
+</li>
+{% else %}<li class="list-group-item text-muted">No checks yet.</li>{% endfor %}
+</ul></div>
+
+<div class="card"><div class="card-header">Previous Reviews</div>
+<ul class="list-group list-group-flush">
+{% for r in reviews %}
+<li class="list-group-item small">
+<strong>{{ r.decision }}</strong> by {{ r.reviewer.name if r.reviewer else '—' }}
+— {{ r.reviewed_at.strftime('%d %b %Y') if r.reviewed_at else '' }}
+{% if r.comments %}<br>{{ r.comments }}{% endif %}
+</li>
+{% else %}<li class="list-group-item text-muted">No reviews yet.</li>{% endfor %}
+</ul></div>
+</div>
+
+<div class="col-md-5">
+<div class="card"><div class="card-header">Submit Review</div><div class="card-body">
+<form method="POST">{{ form.hidden_tag() }}
+<div class="mb-2">{{ form.decision.label(class="form-label") }}{{ form.decision(class="form-select") }}</div>
+<div class="mb-2">{{ form.comments.label(class="form-label") }}{{ form.comments(class="form-control", rows=4) }}</div>
+{{ form.submit(class="btn btn-primary") }}
+</form></div></div>
+</div>
+</div></div>
+{% endblock %}

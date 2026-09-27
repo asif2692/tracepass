@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<h2>Shipments — {{ product.name }}</h2>
+<p><a href="{{ url_for('products.detail', id=product.id) }}">&larr; Product</a></p>
+<div class="row g-4">
+<div class="col-md-5"><div class="card"><div class="card-header">Record Shipment</div><div class="card-body">
+<form method="POST">{{ form.hidden_tag() }}
+<div class="mb-2">{{ form.from_org_id.label(class="form-label") }}{{ form.from_org_id(class="form-select") }}</div>
+<div class="mb-2">{{ form.to_org_id.label(class="form-label") }}{{ form.to_org_id(class="form-select") }}</div>
+<div class="mb-2">{{ form.batch_id.label(class="form-label") }}{{ form.batch_id(class="form-select") }}</div>
+<div class="row"><div class="col-6 mb-2">{{ form.shipped_date.label(class="form-label") }}{{ form.shipped_date(class="form-control") }}</div>
+<div class="col-6 mb-2">{{ form.received_date.label(class="form-label") }}{{ form.received_date(class="form-control") }}</div></div>
+<div class="mb-2">{{ form.status.label(class="form-label") }}{{ form.status(class="form-select") }}</div>
+<div class="mb-2">{{ form.tracking_no.label(class="form-label") }}{{ form.tracking_no(class="form-control") }}</div>
+<div class="mb-2">{{ form.notes.label(class="form-label") }}{{ form.notes(class="form-control", rows=2) }}</div>
+{{ form.submit(class="btn btn-primary btn-sm") }}
+</form></div></div></div>
+<div class="col-md-7"><div class="card"><div class="table-responsive">
+<table class="table mb-0"><thead><tr><th>From</th><th>To</th><th>Status</th><th>Tracking</th></tr></thead>
+<tbody>{% for s in shipments %}<tr>
+<td>{{ s.from_org.name if s.from_org else '—' }}</td>
+<td>{{ s.to_org.name if s.to_org else '—' }}</td>
+<td><span class="badge bg-secondary">{{ s.status }}</span></td>
+<td>{{ s.tracking_no or '—' }}</td>
+</tr>{% else %}<tr><td colspan="4" class="text-muted text-center">No shipments.</td></tr>{% endfor %}
+</tbody></table></div></div></div>
+</div></div>
+{% endblock %}

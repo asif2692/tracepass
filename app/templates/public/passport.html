@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-4">
+<div class="text-center mb-4">
+<span class="badge bg-success mb-2">Verified Digital Product Passport</span>
+<h1>{{ product.name }}</h1>
+<p class="lead"><code>{{ product.passport_code }}</code></p>
+<p class="text-muted">{{ product.brand or '' }} {{ product.model or '' }} · {{ product.category or '' }}</p>
+</div>
+<div class="row g-4">
+<div class="col-md-6">
+<div class="card h-100"><div class="card-header fw-semibold">Identity</div><div class="card-body">
+<dl class="row mb-0">
+<dt class="col-5">Manufacturer</dt><dd class="col-7">{{ product.manufacturer.name if product.manufacturer else '—' }}</dd>
+<dt class="col-5">Origin</dt><dd class="col-7">{{ product.origin_country or '—' }}</dd>
+<dt class="col-5">Compliance</dt><dd class="col-7"><span class="badge bg-success">{{ product.compliance_status }}</span></dd>
+<dt class="col-5">Published</dt><dd class="col-7">{{ product.published_at.strftime('%d %b %Y') if product.published_at else '—' }}</dd>
+</dl>
+{% if product.description %}<hr><p class="small">{{ product.description }}</p>{% endif %}
+</div></div></div>
+<div class="col-md-6">
+<div class="card h-100"><div class="card-header fw-semibold">Materials</div>
+<ul class="list-group list-group-flush">
+{% for m in materials %}
+<li class="list-group-item">{{ m.material.name if m.material else '—' }}
+{% if m.percentage %} — {{ m.percentage }}%{% endif %}
+{% if m.supplier %}<br><small class="text-muted">Supplier: {{ m.supplier.name }}</small>{% endif %}
+</li>
+{% else %}<li class="list-group-item text-muted">No materials listed.</li>{% endfor %}
+</ul></div></div>
+<div class="col-md-6">
+<div class="card h-100"><div class="card-header fw-semibold">Batches</div>
+<ul class="list-group list-group-flush">
+{% for b in batches %}
+<li class="list-group-item">{{ b.batch_no }} — {{ b.manufacture_date or 'n/a' }}
+{% if b.production_location %}<br><small class="text-muted">{{ b.production_location }}</small>{% endif %}
+</li>
+{% else %}<li class="list-group-item text-muted">No batches.</li>{% endfor %}
+</ul></div></div>
+<div class="col-md-6">
+<div class="card h-100"><div class="card-header fw-semibold">Certificates</div>
+<ul class="list-group list-group-flush">
+{% for c in certificates %}
+<li class="list-group-item">{{ c.cert_type }} ({{ c.issuer or 'n/a' }})
+{% if c.expiry_date %}<br><small class="text-muted">Valid until {{ c.expiry_date }}</small>{% endif %}
+</li>
+{% else %}<li class="list-group-item text-muted">No certificates.</li>{% endfor %}
+</ul></div></div>
+<div class="col-12">
+<div class="card"><div class="card-header fw-semibold">Supply-Chain Journey</div>
+<ul class="list-group list-group-flush">
+{% for e in events %}
+<li class="list-group-item d-flex justify-content-between">
+<span><span class="badge bg-primary">{{ e.event_type }}</span> {{ e.location or '' }}
+{% if e.organization %} · {{ e.organization.name }}{% endif %}</span>
+<small class="text-muted">{{ e.event_date.strftime('%d %b %Y') if e.event_date else '' }}</small>
+</li>
+{% else %}<li class="list-group-item text-muted">No events published.</li>{% endfor %}
+</ul></div></div>
+</div>
+<p class="text-center text-muted small mt-4">TracePass Digital Product Passport — Authenticity verified against official records.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">Dashboard</h2>
+            <p class="text-muted mb-0">Welcome, {{ user.name }}
+                <span class="badge bg-primary">{{ user.role.name }}</span>
+            </p>
+        </div>
+        <a href="{{ url_for('public.verify') }}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-qr-code-scan"></i> Verify Passport
+        </a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-xl-3">
+            <div class="card stat-card h-100"><div class="card-body">
+                <h6 class="text-muted text-uppercase mb-1">Products</h6>
+                <h3 class="mb-0">{{ stats.total_products }}</h3>
+                <small class="text-success">{{ stats.published }} published</small>
+            </div></div>
+        </div>
+        <div class="col-6 col-xl-3">
+            <div class="card stat-card h-100"><div class="card-body">
+                <h6 class="text-muted text-uppercase mb-1">Pending Review</h6>
+                <h3 class="mb-0">{{ stats.pending_review }}</h3>
+            </div></div>
+        </div>
+        <div class="col-6 col-xl-3">
+            <div class="card stat-card h-100"><div class="card-body">
+                <h6 class="text-muted text-uppercase mb-1">Certificates</h6>
+                <h3 class="mb-0">{{ stats.certificates }}</h3>
+                {% if stats.expired_certs %}<small class="text-danger">{{ stats.expired_certs }} expired</small>{% endif %}
+            </div></div>
+        </div>
+        <div class="col-6 col-xl-3">
+            <div class="card stat-card h-100"><div class="card-body">
+                <h6 class="text-muted text-uppercase mb-1">Supply Events</h6>
+                <h3 class="mb-0">{{ stats.events }}</h3>
+            </div></div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+            <div class="card"><div class="card-header bg-white fw-semibold">Users by Role</div>
+            <div class="card-body"><div class="chart-container"><canvas id="roleChart"></canvas></div></div></div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card"><div class="card-header bg-white fw-semibold">Product Status</div>
+            <div class="card-body"><div class="chart-container"><canvas id="statusChart"></canvas></div></div></div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card"><div class="card-header bg-white fw-semibold">Compliance Status</div>
+            <div class="card-body"><div class="chart-container"><canvas id="complianceChart"></canvas></div></div></div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card">
+                <div class="card-header bg-white fw-semibold">Recent Products</div>
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead><tr><th>Code</th><th>Name</th><th>Status</th><th>Compliance</th></tr></thead>
+                        <tbody>
+                        {% for p in recent_products %}
+                        <tr>
+                            <td><a href="{{ url_for('products.detail', id=p.id) }}">{{ p.passport_code }}</a></td>
+                            <td>{{ p.name }}</td>
+                            <td><span class="badge bg-secondary">{{ p.status }}</span></td>
+                            <td><span class="badge bg-info text-dark">{{ p.compliance_status }}</span></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" class="text-muted text-center">No products yet.</td></tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card">
+                <div class="card-header bg-white fw-semibold">Recent Activity</div>
+                <ul class="list-group list-group-flush">
+                    {% for log in recent_logs %}
+                    <li class="list-group-item small">
+                        <strong>{{ log.action }}</strong>
+                        {% if log.entity_type %}<span class="text-muted">· {{ log.entity_type }} #{{ log.entity_id }}</span>{% endif %}
+                        <br><span class="text-muted">{{ log.created_at.strftime('%d %b %H:%M') if log.created_at else '' }}</span>
+                    </li>
+                    {% else %}
+                    <li class="list-group-item text-muted small">No activity yet.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const colors = ['#0d6efd','#6610f2','#6f42c1','#d63384','#dc3545','#fd7e14','#ffc107','#198754'];
+new Chart(document.getElementById('roleChart'), {
+    type: 'doughnut',
+    data: { labels: {{ role_counts.keys()|list|tojson }}, datasets: [{ data: {{ role_counts.values()|list|tojson }}, backgroundColor: colors }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+});
+new Chart(document.getElementById('statusChart'), {
+    type: 'bar',
+    data: { labels: {{ status_counts.keys()|list|tojson }}, datasets: [{ label: 'Products', data: {{ status_counts.values()|list|tojson }}, backgroundColor: colors }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+});
+new Chart(document.getElementById('complianceChart'), {
+    type: 'doughnut',
+    data: { labels: {{ compliance_counts.keys()|list|tojson }}, datasets: [{ data: {{ compliance_counts.values()|list|tojson }}, backgroundColor: ['#ffc107','#0dcaf0','#198754','#dc3545'] }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+});
+</script>
+{% endblock %}

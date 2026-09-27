@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+<h2>Compliance Review Queue</h2>
+<div class="card"><div class="table-responsive">
+<table class="table mb-0"><thead><tr><th>Code</th><th>Name</th><th>Status</th><th>Compliance</th><th></th></tr></thead>
+<tbody>{% for p in products %}<tr>
+<td><code>{{ p.passport_code }}</code></td><td>{{ p.name }}</td>
+<td>{{ p.status }}</td><td>{{ p.compliance_status }}</td>
+<td><a href="{{ url_for('compliance.product_review', product_id=p.id) }}" class="btn btn-sm btn-outline-primary">Review</a></td>
+</tr>{% else %}<tr><td colspan="5" class="text-muted text-center">Queue is empty.</td></tr>{% endfor %}
+</tbody></table></div></div></div>
+{% endblock %}

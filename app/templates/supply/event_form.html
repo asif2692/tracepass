@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container"><div class="row justify-content-center"><div class="col-md-6">
+<div class="card"><div class="card-header">Add Event — {{ product.name }}</div><div class="card-body">
+<form method="POST">{{ form.hidden_tag() }}
+<div class="mb-2">{{ form.event_type.label(class="form-label") }}{{ form.event_type(class="form-select") }}</div>
+<div class="mb-2">{{ form.event_date.label(class="form-label") }}{{ form.event_date(class="form-control") }}</div>
+<div class="mb-2">{{ form.location.label(class="form-label") }}{{ form.location(class="form-control") }}</div>
+<div class="mb-2">{{ form.organization_id.label(class="form-label") }}{{ form.organization_id(class="form-select") }}</div>
+<div class="mb-2">{{ form.batch_id.label(class="form-label") }}{{ form.batch_id(class="form-select") }}</div>
+<div class="mb-2">{{ form.reference_no.label(class="form-label") }}{{ form.reference_no(class="form-control") }}</div>
+<div class="mb-2">{{ form.notes.label(class="form-label") }}{{ form.notes(class="form-control", rows=2) }}</div>
+{{ form.submit(class="btn btn-primary") }}
+<a href="{{ url_for('supply.events', product_id=product.id) }}" class="btn btn-outline-secondary">Cancel</a>
+</form></div></div></div></div></div>
+{% endblock %}
